@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Divakar R — Data Analyst & Automation Developer" />
+  <title>Divakar R — Portfolio V2</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="site-shell">
+    <header class="topbar">
+      <a class="brand" href="#home" aria-label="Divakar R home">
+        <span class="brand-name">DIVAKAR R</span>
+        <span class="brand-role">Data Analyst &amp; Automation Developer</span>
+      </a>
+      <nav class="nav" aria-label="Primary navigation">
+        <a href="#projects">PROJECTS</a>
+        <a href="#experience">EXPERIENCE</a>
+        <a href="#about">ABOUT</a>
+        <a href="#contact">CONTACT</a>
+      </nav>
+    </header>
+
+    <main id="home">
+      <section class="hero section-grid">
+        <div class="hero-copy">
+          <div class="eyebrow">I BUILD</div>
+          <h1>Digital<br /><span>Reality</span><br />Architect</h1>
+          <p class="hero-text">Transforming complex data and repetitive tasks into intelligent systems and meaningful solutions.</p>
+          <a class="work-link" href="#projects"><span>EXPLORE MY WORK</span><span aria-hidden="true">→</span></a>
+        </div>
+
+        <div class="orb-stage" aria-hidden="true">
+          <canvas id="orb-canvas"></canvas>
+          <div class="orb-glow"></div>
+        </div>
+      </section>
+
+      <section id="projects" class="projects section">
+        <div class="section-head">
+          <span>01</span>
+          <h2>Selected Work</h2>
+        </div>
+        <div class="project-list">
+          <a class="project-row" href="#project-voter">
+            <span class="project-index">01</span>
+            <span class="project-title">Election Data Automation</span>
+            <span class="project-meta">PYTHON · EXCEL · VBA</span>
+            <span class="project-arrow">↗</span>
+          </a>
+          <a class="project-row" href="#project-teamboard">
+            <span class="project-index">02</span>
+            <span class="project-title">TeamBoard</span>
+            <span class="project-meta">WEB APP · SUPABASE</span>
+            <span class="project-arrow">↗</span>
+          </a>
+          <a class="project-row" href="#project-srimalli">
+            <span class="project-index">03</span>
+            <span class="project-title">Srimalli Delivery Tracking</span>
+            <span class="project-meta">TRACKING · OPERATIONS</span>
+            <span class="project-arrow">↗</span>
+          </a>
+          <a class="project-row" href="#project-analytics">
+            <span class="project-index">04</span>
+            <span class="project-title">Analytics Dashboards</span>
+            <span class="project-meta">POWER BI · SQL · EXCEL</span>
+            <span class="project-arrow">↗</span>
+          </a>
+        </div>
+      </section>
+
+      <section id="experience" class="experience section">
+        <div class="section-head">
+          <span>02</span>
+          <h2>Experience</h2>
+        </div>
+        <div class="experience-grid">
+          <div>
+            <p class="label">CURRENT / RECENT</p>
+            <h3>Operations &amp; Data</h3>
+            <p class="muted">Building practical automation workflows, data-processing systems and internal tools that reduce repetitive work.</p>
+          </div>
+          <div class="experience-points">
+            <div><span>01</span><p>Automated multi-stage data cleaning and transformation pipelines.</p></div>
+            <div><span>02</span><p>Built dashboards and reporting workflows for operational decisions.</p></div>
+            <div><span>03</span><p>Developed internal web applications and tracking systems.</p></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="about" class="about section">
+        <div class="section-head">
+          <span>03</span>
+          <h2>About</h2>
+        </div>
+        <div class="about-layout">
+          <p class="about-lead">I work where <strong>data, automation and software</strong> meet. My focus is turning manual processes and messy information into systems that are clear, repeatable and useful.</p>
+          <div class="skill-cloud" aria-label="Skills">
+            <span>Python</span><span>SQL</span><span>Excel</span><span>VBA</span><span>Power BI</span><span>Power Query</span><span>Pandas</span><span>PostgreSQL</span><span>JavaScript</span><span>React</span><span>Supabase</span><span>GitHub</span>
+          </div>
+        </div>
+      </section>
+
+      <section id="contact" class="contact section">
+        <div class="section-head">
+          <span>04</span>
+          <h2>Let's Build</h2>
+        </div>
+        <div class="contact-layout">
+          <p>For data, automation, dashboards or practical web applications.</p>
+          <div class="contact-links">
+            <a href="https://github.com/Divakar07-pixel" target="_blank" rel="noreferrer">GITHUB ↗</a>
+            <a href="https://www.linkedin.com/in/divakar-r-688403337" target="_blank" rel="noreferrer">LINKEDIN ↗</a>
+            <a href="mailto:hello@example.com">EMAIL ↗</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer"><span>DIVAKAR R</span><span>PORTFOLIO V2</span></footer>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
