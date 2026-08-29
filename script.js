@@ -2,108 +2,119 @@ const canvas = document.getElementById('orb-canvas');
 const ctx = canvas.getContext('2d');
 const stage = document.querySelector('.orb-stage');
 
-let w = 0;
-let h = 0;
-let dpr = Math.min(window.devicePixelRatio || 1, 2);
+let width = 0;
+let height = 0;
+let dpr = 1;
 let mouseX = 0;
 let mouseY = 0;
 let targetX = 0;
 let targetY = 0;
 let points = [];
-const POINTS = 115;
+let stars = [];
+const POINTS = 135;
+const STARS = 85;
 
 function resize() {
   const rect = stage.getBoundingClientRect();
-  w = rect.width;
-  h = rect.height;
+  width = rect.width;
+  height = rect.height;
   dpr = Math.min(window.devicePixelRatio || 1, 2);
-  canvas.width = Math.floor(w * dpr);
-  canvas.height = Math.floor(h * dpr);
-  canvas.style.width = `${w}px`;
-  canvas.style.height = `${h}px`;
+  canvas.width = Math.floor(width * dpr);
+  canvas.height = Math.floor(height * dpr);
+  canvas.style.width = `${width}px`;
+  canvas.style.height = `${height}px`;
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-  makePoints();
+  createScene();
 }
 
-function makePoints() {
-  points = [];
-  const radius = Math.min(w, h) * 0.32;
-  for (let i = 0; i < POINTS; i += 1) {
+function createScene() {
+  const radius = Math.min(width, height) * 0.34;
+  points = Array.from({ length: POINTS }, () => {
     const theta = Math.acos(1 - 2 * Math.random());
     const phi = Math.random() * Math.PI * 2;
-    points.push({
+    return {
       x: radius * Math.sin(theta) * Math.cos(phi),
       y: radius * Math.cos(theta),
       z: radius * Math.sin(theta) * Math.sin(phi),
-      size: 0.55 + Math.random() * 1.2,
-    });
-  }
+      size: 0.45 + Math.random() * 1.05
+    };
+  });
+
+  stars = Array.from({ length: STARS }, () => ({
+    x: width * (0.1 + Math.random() * 0.82),
+    y: height * (0.08 + Math.random() * 0.84),
+    r: 0.3 + Math.random() * 0.8,
+    phase: Math.random() * Math.PI * 2
+  }));
 }
 
-function project(point, angleY, angleX) {
-  const cy = Math.cos(angleY);
-  const sy = Math.sin(angleY);
-  const cx = Math.cos(angleX);
-  const sx = Math.sin(angleX);
+function project(point, rotationY, rotationX) {
+  const cy = Math.cos(rotationY);
+  const sy = Math.sin(rotationY);
+  const cx = Math.cos(rotationX);
+  const sx = Math.sin(rotationX);
 
   const x1 = point.x * cy - point.z * sy;
   const z1 = point.x * sy + point.z * cy;
   const y1 = point.y * cx - z1 * sx;
   const z2 = point.y * sx + z1 * cx;
-  const perspective = 1 + z2 / (Math.min(w, h) * 1.35);
+  const perspective = 1 + z2 / (Math.min(width, height) * 1.55);
 
   return {
-    x: w * 0.57 + x1 * perspective,
-    y: h * 0.49 + y1 * perspective,
+    x: width * 0.58 + x1 * perspective,
+    y: height * 0.49 + y1 * perspective,
     z: z2,
-    scale: perspective,
+    size: point.size * perspective
   };
 }
 
-function frame(time) {
-  ctx.clearRect(0, 0, w, h);
+function draw(time) {
+  ctx.clearRect(0, 0, width, height);
+
   targetX += (mouseX - targetX) * 0.035;
   targetY += (mouseY - targetY) * 0.035;
 
-  const angleY = time * 0.00018 + targetX * 0.16;
-  const angleX = Math.sin(time * 0.00022) * 0.17 + targetY * 0.1;
-  const projected = points.map((p) => project(p, angleY, angleX));
+  stars.forEach((star) => {
+    const twinkle = 0.2 + (Math.sin(time * 0.001 + star.phase) + 1) * 0.22;
+    ctx.fillStyle = `rgba(255,255,255,${twinkle})`;
+    ctx.beginPath();
+    ctx.arc(star.x + targetX * 10, star.y + targetY * 10, star.r, 0, Math.PI * 2);
+    ctx.fill();
+  });
 
-  const links = [];
+  const rotationY = time * 0.00016 + targetX * 0.22;
+  const rotationX = Math.sin(time * 0.0002) * 0.13 + targetY * 0.12;
+  const projected = points.map((point) => project(point, rotationY, rotationX));
+
+  const maxDistance = Math.min(width, height) * 0.14;
+  ctx.lineWidth = 0.42;
+
   for (let i = 0; i < projected.length; i += 1) {
     for (let j = i + 1; j < projected.length; j += 1) {
       const a = projected[i];
       const b = projected[j];
-      const dx = a.x - b.x;
-      const dy = a.y - b.y;
-      const dist = Math.hypot(dx, dy);
-      if (dist < Math.min(w, h) * 0.115 && Math.abs(a.z - b.z) < 150) {
-        links.push([a, b, dist]);
+      const distance = Math.hypot(a.x - b.x, a.y - b.y);
+      if (distance < maxDistance && Math.abs(a.z - b.z) < 125) {
+        const alpha = Math.max(0.025, 0.13 - distance / (maxDistance * 1.45));
+        ctx.strokeStyle = `rgba(255,255,255,${alpha})`;
+        ctx.beginPath();
+        ctx.moveTo(a.x, a.y);
+        ctx.lineTo(b.x, b.y);
+        ctx.stroke();
       }
     }
   }
 
-  ctx.lineWidth = 0.45;
-  links.forEach(([a, b, dist]) => {
-    const alpha = Math.max(0.035, 0.15 - dist / (Math.min(w, h) * 0.95));
-    ctx.strokeStyle = `rgba(255,255,255,${alpha})`;
+  projected.sort((a, b) => a.z - b.z).forEach((point) => {
+    const depth = Math.max(0, Math.min(1, (point.z + 260) / 520));
+    const alpha = 0.18 + depth * 0.7;
+    ctx.fillStyle = `rgba(255,255,255,${alpha})`;
     ctx.beginPath();
-    ctx.moveTo(a.x, a.y);
-    ctx.lineTo(b.x, b.y);
-    ctx.stroke();
+    ctx.arc(point.x, point.y, Math.max(0.45, point.size), 0, Math.PI * 2);
+    ctx.fill();
   });
 
-  projected
-    .sort((a, b) => a.z - b.z)
-    .forEach((p, index) => {
-      const alpha = 0.2 + ((p.z + 250) / 500) * 0.65;
-      ctx.fillStyle = `rgba(255,255,255,${Math.min(0.9, alpha)})`;
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, points[index]?.size || 0.8, 0, Math.PI * 2);
-      ctx.fill();
-    });
-
-  requestAnimationFrame(frame);
+  requestAnimationFrame(draw);
 }
 
 window.addEventListener('resize', resize);
@@ -114,4 +125,17 @@ window.addEventListener('pointermove', (event) => {
 });
 
 resize();
-requestAnimationFrame(frame);
+requestAnimationFrame(draw);
+
+const revealItems = document.querySelectorAll('.reveal');
+if ('IntersectionObserver' in window) {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  revealItems.forEach((item) => observer.observe(item));
+}
