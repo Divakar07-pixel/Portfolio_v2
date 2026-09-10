@@ -1,3 +1,15 @@
+const loader = document.getElementById('page-loader');
+
+// Let the cinematic intro finish before revealing the portfolio.
+if (loader) {
+  const hideLoader = () => {
+    window.setTimeout(() => loader.classList.add('is-hidden'), 1500);
+  };
+
+  if (document.readyState === 'complete') hideLoader();
+  else window.addEventListener('load', hideLoader, { once: true });
+}
+
 const canvas = document.getElementById('orb-canvas');
 const stage = document.querySelector('.orb-stage');
 
