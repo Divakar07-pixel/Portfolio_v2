@@ -1,0 +1,14 @@
+/* Portfolio V2 spacing correction */
+.hero{min-height:100vh!important}
+.section{padding-top:110px!important;padding-bottom:110px!important}
+.split-section{min-height:auto!important}
+.contact{min-height:auto!important}
+.section-label{margin-bottom:55px!important}
+@media(max-width:900px){
+  .section{padding-top:80px!important;padding-bottom:80px!important}
+  .section-label{margin-bottom:42px!important}
+}
+@media(max-width:560px){
+  .section{padding-top:65px!important;padding-bottom:65px!important}
+  .section-label{margin-bottom:36px!important}
+}
