@@ -1,22 +1,22 @@
 /* Home V2 portal — one stable layout for desktop + mobile. */
 .hero{position:relative;min-height:100vh;height:100vh;overflow:hidden;isolation:isolate;display:grid;grid-template-columns:minmax(0,1fr) minmax(420px,1fr);align-items:center}
 .hero-copy{position:relative;z-index:5;max-width:720px;opacity:1;transform:none;clip-path:none}
-.orb-stage{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;min-height:100%!important;margin:0!important;z-index:2!important;pointer-events:none!important;opacity:.72;transform:none!important;filter:none!important;overflow:hidden}
-.orb-stage canvas{display:block;width:100%;height:100%;transform:none!important}
-.orb-stage .orb-haze{position:absolute;left:50%;top:49%;width:min(42vw,560px);height:min(42vw,560px);transform:translate(-50%,-50%);border-radius:50%;pointer-events:none;opacity:.34}
-.orb-stage:before,.orb-stage:after{content:"";position:absolute;left:67%;top:49%;border:1px solid rgba(255,255,255,.055);border-radius:50%;pointer-events:none;transform:translate(-50%,-50%);opacity:.32}
-.orb-stage:before{width:min(43vw,560px);height:min(43vw,560px);box-shadow:0 0 80px rgba(255,255,255,.018),inset 0 0 60px rgba(255,255,255,.012)}
-.orb-stage:after{width:min(31vw,405px);height:min(31vw,405px);opacity:.15}
+.orb-stage{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;min-height:100%!important;margin:0!important;z-index:2!important;pointer-events:none!important;opacity:.58;transform:none!important;filter:none!important;overflow:hidden}
+.orb-stage canvas{display:block;width:100%;height:100%;transform:none!important;opacity:.92}
+.orb-stage .orb-haze{position:absolute;left:50%;top:49%;width:min(42vw,560px);height:min(42vw,560px);transform:translate(-50%,-50%);border-radius:50%;pointer-events:none;opacity:.16;background:radial-gradient(circle,rgba(255,255,255,.025) 0%,rgba(255,255,255,.008) 42%,transparent 72%)}
+.orb-stage:before,.orb-stage:after{content:"";position:absolute;left:67%;top:49%;border:1px solid rgba(255,255,255,.025);border-radius:50%;pointer-events:none;transform:translate(-50%,-50%);opacity:.18}
+.orb-stage:before{width:min(43vw,560px);height:min(43vw,560px);box-shadow:none}
+.orb-stage:after{width:min(31vw,405px);height:min(31vw,405px);opacity:.09}
 .page-loader{position:fixed;inset:0;z-index:1000;background:#050505;overflow:hidden;opacity:1;visibility:visible;transition:opacity .75s cubic-bezier(.22,1,.36,1),visibility .75s}
 .loader-orb-stage{position:absolute;inset:0;width:100%;height:100%;overflow:hidden}
-.loader-orb-stage canvas{display:block;width:100%;height:100%}
-.loader-orb-stage .orb-haze{position:absolute;left:50%;top:49%;width:min(42vw,560px);height:min(42vw,560px);transform:translate(-50%,-50%);border-radius:50%;opacity:.28;pointer-events:none}
-.loader-orb-stage:before,.loader-orb-stage:after{content:"";position:absolute;left:50%;top:49%;border:1px solid rgba(255,255,255,.065);border-radius:50%;pointer-events:none;transform:translate(-50%,-50%) scale(var(--portal-ring-scale,1))}
-.loader-orb-stage:before{width:min(43vw,560px);height:min(43vw,560px);opacity:var(--portal-ring-opacity,.45)}
-.loader-orb-stage:after{width:min(31vw,405px);height:min(31vw,405px);opacity:.2}
+.loader-orb-stage canvas{display:block;width:100%;height:100%;opacity:.9}
+.loader-orb-stage .orb-haze{position:absolute;left:50%;top:49%;width:min(42vw,560px);height:min(42vw,560px);transform:translate(-50%,-50%);border-radius:50%;opacity:.13;background:radial-gradient(circle,rgba(255,255,255,.022) 0%,rgba(255,255,255,.006) 45%,transparent 72%);pointer-events:none}
+.loader-orb-stage:before,.loader-orb-stage:after{content:"";position:absolute;left:50%;top:49%;border:1px solid rgba(255,255,255,.035);border-radius:50%;pointer-events:none;transform:translate(-50%,-50%) scale(var(--portal-ring-scale,1))}
+.loader-orb-stage:before{width:min(43vw,560px);height:min(43vw,560px);opacity:var(--portal-ring-opacity,.3)}
+.loader-orb-stage:after{width:min(31vw,405px);height:min(31vw,405px);opacity:.1}
 .page-loader.portal-ready{opacity:1;visibility:visible}
 .page-loader.portal-entered{opacity:0;visibility:hidden;pointer-events:none}
 .portal-lock{overflow:hidden!important;height:100%!important}
-@media(max-width:900px){.hero{grid-template-columns:1fr;min-height:100vh;height:100vh;padding-top:112px;padding-bottom:28px}.hero-copy{width:100%;max-width:620px}.orb-stage{opacity:.62}.orb-stage:before{left:68%;width:390px;height:390px}.orb-stage:after{left:68%;width:285px;height:285px}.orb-stage .orb-haze{width:390px;height:390px}.loader-orb-stage:before{width:72vw;height:72vw}.loader-orb-stage:after{width:50vw;height:50vw}.loader-orb-stage .orb-haze{width:68vw;height:68vw}}
-@media(max-width:560px){.hero{padding:104px 6vw 26px;min-height:100svh;height:100svh}.orb-stage{opacity:.55}.orb-stage:before{left:72%;width:300px;height:300px}.orb-stage:after{left:72%;width:218px;height:218px}.orb-stage .orb-haze{width:290px;height:290px}.loader-orb-stage:before{width:82vw;height:82vw}.loader-orb-stage:after{width:58vw;height:58vw}.loader-orb-stage .orb-haze{width:76vw;height:76vw}}
-@media(prefers-reduced-motion:reduce){.page-loader{display:none!important}.portal-lock{overflow:auto!important;height:auto!important}.hero{min-height:100vh;height:100vh}.orb-stage{position:absolute!important;opacity:.62!important}}
+@media(max-width:900px){.hero{grid-template-columns:1fr;min-height:100vh;height:100vh;padding-top:112px;padding-bottom:28px}.hero-copy{width:100%;max-width:620px}.orb-stage{opacity:.52}.orb-stage:before{left:68%;width:390px;height:390px}.orb-stage:after{left:68%;width:285px;height:285px}.orb-stage .orb-haze{width:390px;height:390px}.loader-orb-stage:before{width:72vw;height:72vw}.loader-orb-stage:after{width:50vw;height:50vw}.loader-orb-stage .orb-haze{width:68vw;height:68vw}}
+@media(max-width:560px){.hero{padding:104px 6vw 26px;min-height:100svh;height:100svh}.orb-stage{opacity:.46}.orb-stage:before{left:72%;width:300px;height:300px}.orb-stage:after{left:72%;width:218px;height:218px}.orb-stage .orb-haze{width:290px;height:290px}.loader-orb-stage:before{width:82vw;height:82vw}.loader-orb-stage:after{width:58vw;height:58vw}.loader-orb-stage .orb-haze{width:76vw;height:76vw}}
+@media(prefers-reduced-motion:reduce){.page-loader{display:none!important}.portal-lock{overflow:auto!important;height:auto!important}.hero{min-height:100vh;height:100vh}.orb-stage{position:absolute!important;opacity:.5!important}}
