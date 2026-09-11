@@ -54,7 +54,7 @@ function initOrb(canvasEl,host,centerX=.5){
 }
 initOrb(loaderCanvas,loader||document.body,.5);initOrb(canvas,canvas?.parentElement||hero,.67);
 
-/* Portal: a downward scroll starts the complete circle-to-home transition immediately. */
+/* Portal: scroll down drives a complete circle-to-Home transition. */
 if(loader&&!reduced){
  document.body.classList.add('portal-lock');
  let entered=false,current=0,target=0,raf=false;
@@ -62,25 +62,63 @@ if(loader&&!reduced){
  const ease=v=>v<.5?2*v*v:1-Math.pow(-2*v+2,2)/2;
  function setProgress(v){target=clamp(v,0,1);if(!raf){raf=true;requestAnimationFrame(tick);}}
  function tick(){
-  current+=(target-current)*.12;if(Math.abs(target-current)<.0005)current=target;
-  const p=ease(current);loader.style.setProperty('--portal-ring-scale',(1+p*.7).toFixed(3));loader.style.setProperty('--portal-ring-opacity',(0.3+p*.18).toFixed(3));loader.style.setProperty('--loader-fade',p.toFixed(3));
+  current+=(target-current)*.12;
+  if(Math.abs(target-current)<.0005)current=target;
+  const p=ease(current);
+  loader.style.setProperty('--portal-ring-scale',(1+p*.7).toFixed(3));
+  loader.style.setProperty('--portal-ring-opacity',(0.3+p*.18).toFixed(3));
+  loader.style.setProperty('--portal-orb-scale',(1+p*.55).toFixed(3));
+  loader.style.setProperty('--loader-fade',p.toFixed(3));
   if(current!==target)requestAnimationFrame(tick);else raf=false;
   if(!entered&&current>.985)finish();
  }
- function finish(){entered=true;loader.classList.add('portal-entered');document.body.classList.remove('portal-lock');setTimeout(()=>loader.remove(),800);}
- function beginFromScroll(delta){if(entered||delta<=0)return;if(event&&event.cancelable)event.preventDefault();setProgress(1);}
- window.addEventListener('wheel',e=>{if(entered||e.ctrlKey)return;if(e.deltaY>0){if(e.cancelable)e.preventDefault();setProgress(1);}}, {passive:false});
- window.addEventListener('keydown',e=>{if(entered)return;if(['ArrowDown','PageDown',' ','End'].includes(e.key)){e.preventDefault();setProgress(1);}});
+ function finish(){
+  entered=true;
+  loader.classList.add('portal-entered');
+  document.body.classList.remove('portal-lock');
+  setTimeout(()=>loader.remove(),850);
+ }
+ window.addEventListener('wheel',e=>{
+  if(entered||e.ctrlKey)return;
+  if(e.deltaY>0){
+   if(e.cancelable)e.preventDefault();
+   setProgress(1);
+  }
+ },{passive:false});
+ window.addEventListener('keydown',e=>{
+  if(entered)return;
+  if(['ArrowDown','PageDown',' ','End'].includes(e.key)){
+   e.preventDefault();
+   setProgress(1);
+  }
+ });
  let touchY=0;
  window.addEventListener('touchstart',e=>{touchY=e.touches[0].clientY;},{passive:true});
- window.addEventListener('touchmove',e=>{if(entered)return;const d=touchY-e.touches[0].clientY;if(d>3){if(e.cancelable)e.preventDefault();setProgress(1);touchY=e.touches[0].clientY;}},{passive:false});
- if(document.readyState==='complete')loader.classList.add('portal-ready');else window.addEventListener('load',()=>loader.classList.add('portal-ready'),{once:true});
+ window.addEventListener('touchmove',e=>{
+  if(entered)return;
+  const d=touchY-e.touches[0].clientY;
+  if(d>3){
+   if(e.cancelable)e.preventDefault();
+   setProgress(1);
+   touchY=e.touches[0].clientY;
+  }
+ },{passive:false});
+ if(document.readyState==='complete')loader.classList.add('portal-ready');
+ else window.addEventListener('load',()=>loader.classList.add('portal-ready'),{once:true});
 }
 if(reduced&&loader)loader.remove();
 
 /* Home section entrances. */
 if(!reduced&&'IntersectionObserver'in window){
  const sections=document.querySelectorAll('.scroll-section');
- const observer=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)return;const el=e.target;el.classList.add('is-inview');if(el.classList.contains('projects-section'))el.classList.add('projects-inview');if(el.classList.contains('skills-section'))el.classList.add('skills-inview');if(el.classList.contains('contact'))el.classList.add('contact-inview');observer.unobserve(el);}),{threshold:.12,rootMargin:'0px 0px -10% 0px'});
+ const observer=new IntersectionObserver(es=>es.forEach(e=>{
+  if(!e.isIntersecting)return;
+  const el=e.target;
+  el.classList.add('is-inview');
+  if(el.classList.contains('projects-section'))el.classList.add('projects-inview');
+  if(el.classList.contains('skills-section'))el.classList.add('skills-inview');
+  if(el.classList.contains('contact'))el.classList.add('contact-inview');
+  observer.unobserve(el);
+ }),{threshold:.12,rootMargin:'0px 0px -10% 0px'});
  sections.forEach(s=>observer.observe(s));
 }
