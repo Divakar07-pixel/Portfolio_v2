@@ -9,7 +9,7 @@ function initOrb(canvasEl,host,centerX=.5){
  if(!canvasEl||!host)return;
  const ctx=canvasEl.getContext('2d');
  let w=0,h=0,dpr=1,mx=centerX,my=.49,tx=centerX,ty=.49,interaction=0;
- const POINTS=300,MAX_LINKS=320,points=[];
+ const POINTS=340,MAX_LINKS=420,points=[];
 
  function resize(){
   const r=host.getBoundingClientRect();
@@ -18,17 +18,17 @@ function initOrb(canvasEl,host,centerX=.5){
   canvasEl.style.width=w+'px';canvasEl.style.height=h+'px';
   ctx.setTransform(dpr,0,0,dpr,0,0);
 
-  const radius=Math.min(w,h)*.31;
+  const radius=Math.min(w,h)*.34;
   points.length=0;
   for(let i=0;i<POINTS;i++){
    const a=Math.random()*Math.PI*2;
    const u=Math.random()*2-1;
-   const rr=radius*(.72+Math.random()*.34);
+   const rr=radius*(.70+Math.random()*.38);
    points.push({
     x:Math.sqrt(1-u*u)*Math.cos(a)*rr,
     y:u*rr,
     z:Math.sqrt(1-u*u)*Math.sin(a)*rr,
-    size:.65+Math.random()*1.25,
+    size:.85+Math.random()*1.45,
     phase:Math.random()*Math.PI*2,
     speed:.00004+Math.random()*.00005
    });
@@ -50,12 +50,12 @@ function initOrb(canvasEl,host,centerX=.5){
   tx+=(mx-tx)*.035;
   ty+=(my-ty)*.035;
 
-  const cx=w*centerX,cy=h*.49,rad=Math.min(w,h)*.31;
+  const cx=w*centerX,cy=h*.49,rad=Math.min(w,h)*.34;
   const distance=Math.hypot(mx*w-cx,my*h-cy);
   const active=Math.max(0,1-distance/rad);
   interaction+=(active-interaction)*.055;
 
-  /* One complete 360° rotation approximately every 12 seconds. */
+  /* Continuous 360° rotation — approximately one full turn every 12 seconds. */
   const ry=t*.000524+tx*.12;
   const rx=Math.sin(t*.00011)*.055+ty*.055;
 
@@ -83,59 +83,64 @@ function initOrb(canvasEl,host,centerX=.5){
    return q;
   });
 
-  /* Soft white orbital structure — still entirely canvas-generated. */
+  /* Bright white orbital structure — entirely canvas-generated. */
   ctx.save();
   ctx.translate(cx,cy);
   ctx.rotate(t*.00008);
   for(let k=0;k<3;k++){
-   const rr=Math.min(w,h)*(.23+k*.075);
+   const rr=Math.min(w,h)*(.25+k*.08);
    ctx.beginPath();
    ctx.ellipse(0,0,rr,rr*(.24+k*.15),0,0,Math.PI*2);
-   ctx.strokeStyle=`rgba(255,255,255,${.045-k*.008})`;
-   ctx.lineWidth=.65;
+   ctx.strokeStyle=`rgba(255,255,255,${.10-k*.015})`;
+   ctx.lineWidth=.8;
    ctx.stroke();
   }
   ctx.restore();
 
-  const maxD=Math.min(w,h)*(.14+interaction*.035);
+  const maxD=Math.min(w,h)*(.155+interaction*.04);
   const links=[];
   for(let i=0;i<pts.length;i++){
    for(let j=i+1;j<pts.length;j++){
     const a=pts[i],b=pts[j];
     const d=Math.hypot(a.x-b.x,a.y-b.y);
-    if(d<maxD&&Math.abs(a.z-b.z)<125)links.push({a,b,d});
+    if(d<maxD&&Math.abs(a.z-b.z)<135)links.push({a,b,d});
    }
   }
   links.sort((a,b)=>a.d-b.d);
 
-  ctx.lineWidth=.65;
+  ctx.lineWidth=.75;
   links.slice(0,MAX_LINKS).forEach(({a,b,d})=>{
    const pulse=.5+.5*Math.sin(t*.001+a.x*.009);
-   let alpha=Math.max(.018,.105-d/(maxD*1.35));
+   let alpha=Math.max(.035,.22-d/(maxD*1.25));
    alpha*=.72+pulse*.28;
-   alpha+=(a.near+b.near)*.018;
-   ctx.strokeStyle=`rgba(255,255,255,${Math.min(.16,alpha)})`;
+   alpha+=(a.near+b.near)*.025;
+   ctx.strokeStyle=`rgba(255,255,255,${Math.min(.28,alpha)})`;
    ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();
   });
 
   if(interaction>.04){
    ctx.beginPath();
-   ctx.arc(mx*w,my*h,Math.min(w,h)*(.11+interaction*.045),0,Math.PI*2);
-   ctx.strokeStyle=`rgba(255,255,255,${interaction*.035})`;
-   ctx.lineWidth=.6;
+   ctx.arc(mx*w,my*h,Math.min(w,h)*(.12+interaction*.05),0,Math.PI*2);
+   ctx.strokeStyle=`rgba(255,255,255,${interaction*.055})`;
+   ctx.lineWidth=.7;
    ctx.stroke();
   }
 
+  /* Crisp white particles with a restrained glow. */
+  ctx.save();
+  ctx.shadowColor='rgba(255,255,255,.65)';
+  ctx.shadowBlur=2.5;
   pts.sort((a,b)=>a.z-b.z).forEach(p=>{
-   const depth=Math.max(0,Math.min(1,(p.z+250)/500));
+   const depth=Math.max(0,Math.min(1,(p.z+300)/600));
    const near=p.near;
    const sz=p.size*(1+near*interaction*.65);
-   const alpha=Math.min(.92,.24+depth*.52+near*interaction*.18);
+   const alpha=Math.min(.98,.50+depth*.42+near*interaction*.10);
    ctx.fillStyle=`rgba(255,255,255,${alpha})`;
    ctx.beginPath();
-   ctx.arc(p.x,p.y,Math.max(.55,sz),0,Math.PI*2);
+   ctx.arc(p.x,p.y,Math.max(.7,sz),0,Math.PI*2);
    ctx.fill();
   });
+  ctx.restore();
 
   requestAnimationFrame(draw);
  }
