@@ -3,15 +3,13 @@
 .hero-copy{position:relative;z-index:5;max-width:720px;opacity:1;transform:none;clip-path:none}
 .orb-stage{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;min-height:100%!important;margin:0!important;z-index:2!important;pointer-events:none!important;opacity:1!important;transform:none!important;filter:none!important;overflow:hidden}
 .orb-stage canvas{display:block;width:100%;height:100%;transform:none!important;opacity:1!important}
-.orb-stage .orb-haze{display:none!important}
-.orb-stage:before,.orb-stage:after{display:none!important}
-.page-loader{position:fixed;inset:0;z-index:1000;background:#050505;overflow:hidden;opacity:1;visibility:visible;transition:opacity .75s cubic-bezier(.22,1,.36,1),visibility .75s}
+.orb-stage .orb-haze,.orb-stage:before,.orb-stage:after{display:none!important}
+.page-loader{position:fixed;inset:0;z-index:1000;background:#050505;overflow:hidden;opacity:1;visibility:visible;transform:scale(1);transform-origin:center center;transition:opacity .85s cubic-bezier(.22,1,.36,1),transform .95s cubic-bezier(.22,1,.36,1),visibility .85s}
 .loader-orb-stage{position:absolute;inset:0;width:100%;height:100%;overflow:hidden}
-.loader-orb-stage canvas{display:block;width:100%;height:100%;opacity:1!important}
-.loader-orb-stage .orb-haze{display:none!important}
-.loader-orb-stage:before,.loader-orb-stage:after{display:none!important}
+.loader-orb-stage canvas{display:block;width:100%;height:100%;opacity:1!important;transform:scale(var(--portal-orb-scale,1));transform-origin:center center;will-change:transform}
+.loader-orb-stage .orb-haze,.loader-orb-stage:before,.loader-orb-stage:after{display:none!important}
 .page-loader.portal-ready{opacity:1;visibility:visible}
-.page-loader.portal-entered{opacity:0;visibility:hidden;pointer-events:none}
+.page-loader.portal-entered{opacity:0;visibility:hidden;pointer-events:none;transform:scale(1.06)}
 .portal-lock{overflow:hidden!important;height:100%!important}
 @media(max-width:900px){.hero{grid-template-columns:1fr;min-height:100vh;height:100vh;padding-top:112px;padding-bottom:28px}.hero-copy{width:100%;max-width:620px}.orb-stage{opacity:1!important}}
 @media(max-width:560px){.hero{padding:104px 6vw 26px;min-height:100svh;height:100svh}.orb-stage{opacity:1!important}}
